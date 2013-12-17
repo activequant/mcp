@@ -1,0 +1,48 @@
+package ${ENTITY.packageName}.interfaces.service;
+// GENERATED CODE. DO NOT MODIFY THIS FILE.
+
+// ---- Java imports
+import java.util.List;
+
+// ---- Spring imports
+import org.springframework.stereotype.Service;
+
+// ---- Project imports
+import ${ENTITY.packageName}.entity.${ENTITY.name};
+#foreach ( $import in ${ENTITY.imports} )
+import $import;
+#end
+
+
+/**
+ * This service interface defines many input parameters. 
+ */
+@Service
+public interface I${ENTITY.name}Service {
+
+	/**
+	 * Finds an object of type ${ENTITY.name} by its ID.
+	 * 
+	 * @param id 
+	 * @return the found instance or null if not present. 
+	 */
+	${ENTITY.name} findById(Integer id);
+	
+	List<${ENTITY.name}> all();
+	
+	${ENTITY.name} saveOrUpdate(${ENTITY.name} instance);
+	
+	void delete(${ENTITY.name} instance);
+
+
+#foreach ( $prop in ${ENTITY.properties} )
+	/**
+	 * Finds all ${ENTITY.name} whose ${prop.name} has a specific value.  
+	 * 
+	 * @param parameter The search-by parameter
+	 * @return a list of found objects  
+	 */
+	List<${ENTITY.name}> findBy${prop.camelCaseName}(${prop.type} parameter);
+#end	
+		
+}

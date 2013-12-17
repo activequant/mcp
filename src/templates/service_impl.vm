@@ -1,0 +1,59 @@
+package ${ENTITY.packageName}.service;
+// GENERATED CODE. DO NOT MODIFY THIS FILE.
+
+// ---- java imports
+import java.util.List;
+
+// ---- Spring imports
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+
+// ---- Project imports
+import ${ENTITY.packageName}.entity.${ENTITY.name};
+import ${ENTITY.packageName}.interfaces.dao.I${ENTITY.name}Dao;
+import ${ENTITY.packageName}.interfaces.service.I${ENTITY.name}Service;
+
+#foreach ( $import in ${ENTITY.imports} )
+import $import;
+#end
+
+
+public class ${ENTITY.name}Service implements I${ENTITY.name}Service {
+
+	@Autowired
+    private I${ENTITY.name}Dao dao;
+    
+	@Override
+	public ${ENTITY.name} findById(Integer id) {
+		return dao.findById(id); 
+	}
+	
+	@Override
+	public List<${ENTITY.name}> all() {
+		return dao.all();    
+	} 
+	
+	@Transactional
+	@Override
+	public ${ENTITY.name} saveOrUpdate(${ENTITY.name} instance) {
+	    return dao.saveOrUpdate(instance);
+	}
+	
+	@Transactional
+	@Override
+	public void delete(${ENTITY.name} instance) {
+		dao.delete(instance);
+	}	
+
+#foreach ( $prop in ${ENTITY.properties} )
+	/**
+	 * see @I${ENTITY.name}Service
+	 */
+	public List<${ENTITY.name}> findBy${prop.camelCaseName}(${prop.type} parameter){
+		return dao.findBy${prop.camelCaseName}(parameter);
+	}
+	
+#end	
+}
+

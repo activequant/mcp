@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gensrc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="libs/velocity-1.7/velocity-1.7-dep.jar"/>
+	<classpathentry kind="lib" path="libs/velocity-1.7/velocity-1.7.jar"/>
+	<classpathentry kind="lib" path="libs/snakeyaml/target/snakeyaml-1.11.jar"/>
+	<classpathentry kind="lib" path="/home/ustaudinger/.m2/repository/org/springframework/spring-core/3.2.2.RELEASE/spring-core-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ustaudinger/.m2/repository/org/springframework/spring-context/3.2.2.RELEASE/spring-context-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ustaudinger/.m2/repository/org/springframework/spring-tx/3.2.2.RELEASE/spring-tx-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ustaudinger/.m2/repository/org/springframework/spring-beans/3.2.2.RELEASE/spring-beans-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="/home/ustaudinger/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.1.Final/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
