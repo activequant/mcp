@@ -1,0 +1,122 @@
+package ${ENTITY.packageName}.entity;
+// GENERATED CODE. DO NOT MODIFY THIS FILE.
+
+/**
+ *	This software is provided under the GPL.  
+ */
+
+// ---- javax libraries.
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+// ---- apache commons libraries. 
+import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+
+#foreach ( $import in ${ENTITY.imports} )
+import $import;
+#end
+
+
+@Entity(name="${ENTITY.name}")
+public class ${ENTITY.name} {
+	
+	// -------------- Properties and ID
+	@Id
+	private Integer id; 
+	
+#foreach( $prop in ${ENTITY.properties} )
+#if( ${prop.documentation} )
+	/**
+	 * ${prop.documentation}
+	 */
+#end
+#foreach( $annotation in ${prop.annotations} )
+	${annotation}	
+#end
+#if( ${prop.isTransient()} )
+	@Transient
+#else
+	@Column
+#end	
+	private ${prop.type} ${prop.name};
+		
+#end
+
+	// -------------- Constructors
+	/**
+	 * Empty constructor. 
+	 */
+	public ${ENTITY.name}(){
+		// intentionally empty. 	
+	}
+	
+	/**
+	 * full setter constructor. 
+	 */ 
+	public ${ENTITY.name}(
+#foreach( $prop in ${ENTITY.properties} )
+		${prop.type} ${prop.name}#if( $foreach.hasNext ),#end
+				
+#end		
+	){
+		// setting all properties. 
+#foreach( $prop in ${ENTITY.properties} )
+		this.${prop.name} = ${prop.name}; 
+#end
+	}
+	
+
+	// ----------- GETTERS AND SETTERS
+	public Integer getId(){
+		return id; 
+	}
+	
+	public void setId(Integer id){
+		this.id = id; 
+	}
+	
+#foreach( $prop in ${ENTITY.properties} )
+	public void set${prop.camelCaseName}(){
+		this.${prop.name} = ${prop.name};
+	}
+	
+	public ${prop.type} get${prop.camelCaseName}(){
+		return this.${prop.name};
+	}
+		
+#end	
+
+	// ----------- EQUALS and HASHCODE
+	@Override
+	public int hashCode(){
+		return new HashCodeBuilder()
+#foreach( $prop in ${ENTITY.properties} )
+		.append(${prop.name})
+#end    	
+		.toHashCode();
+	}
+
+	@Override	
+	public 	boolean equals(Object obj){
+   		if (obj == null) { return false; }
+   		if (obj == this) { return true; }
+   		if (obj.getClass() != getClass()) {
+			return false;
+   		}
+   		
+   		${ENTITY.name} castObj = (${ENTITY.name}) obj;
+   		return new EqualsBuilder()
+            		.appendSuper(super.equals(obj))
+            		.append(getId(), castObj.getId())
+#foreach( $prop in ${ENTITY.properties} )
+			.append(${prop.name}, castObj.${prop.name})
+#end
+			.isEquals();	
+	}
+
+}

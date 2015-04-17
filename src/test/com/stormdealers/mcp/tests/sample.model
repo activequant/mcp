@@ -1,0 +1,50 @@
+project: {
+  targetFolder: "gensrc",
+  name: "A sample project", 
+  documentation: "This sample project is for testing purposes", 
+  generatorOptions: {
+    A: "B",
+    C: "D"
+  },
+  packages: [
+    package: {
+      name: "com.fe"
+    },
+    package: {
+      name: "com.activequant",
+      documentation: "This is a package",
+      entities: {
+        MarketDataSource: {
+          properties: {
+            vendorName: {
+              type: String
+            }
+          }
+        },      
+        MarketDataInstrument: {
+          properties: {
+            source: {
+              type: MarketDataSource
+            }
+          }        
+        },
+        Instrument: {
+          documentation: "The instrument is a base class for all extensions. ",
+          abstract: true,
+          properties: {
+            name: {    
+              transient: true,        
+              type: String, 
+              documentation: "Every instrument has a name.",
+              annotations: ["@SomethingCustom"]              
+            }, 
+            description: {
+              type: String,
+              documentation: "The description should be human readable" 
+            }                
+          }
+        }        
+      }
+    }
+  ]
+}

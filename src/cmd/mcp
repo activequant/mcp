@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -z $1 ]; then
+	echo -e "Usage: mcp <MODEL_FILE>"
+	exit 1
+fi
+
+CLASSPATH=$MODEL_HOME/mcp-1.0.0.jar
+
+$JAVA_HOME/bin/java -cp $CLASSPATH com.stormdealers.mcp.MCPMain $1
