@@ -41,7 +41,7 @@ public class ${ENTITY.name} {
 #if( ${prop.isTransient()} )
 	@Transient
 #else
-	@Column
+	@Column(name="${prop.name}_")
 #end	
 	private ${prop.type} ${prop.name};
 		

@@ -1,26 +1,33 @@
-<plugin>
-<artifactId>maven-assembly-plugin</artifactId>
-<configuration>
-    <archive>
-        <manifest>
-            <mainClass>package.MessageReceiver</mainClass>
-        </manifest>
-    </archive>
-    <descriptorRefs>
-        <descriptorRef>jar-with-dependencies</descriptorRef>
-    </descriptorRefs>
-    <descriptors>
-        <descriptor>src/main/assembly/jar.xml</descriptor>
-        <descriptor>src/main/assembly/zip.xml</descriptor>
-    </descriptors>
-</configuration>
-<executions>
-    <execution>
-        <id>make-assembly</id>
-        <phase>package</phase>
-        <goals>
-            <goal>single</goal>
-        </goals>
-    </execution>
-</executions>
-</plugin>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>bin</id>
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>${project.basedir}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README*</include>
+        <include>LICENSE*</include>
+        <include>NOTICE*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.basedir}/src/cmd</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>
