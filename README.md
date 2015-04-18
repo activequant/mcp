@@ -17,7 +17,7 @@ Create an environment variable MCP_HOME that points to your mcp root directory (
 
 Then add MCP_HOME folder to your $PATH variable, so that you can invoke 'mcp'. 
 
-mcp will look for templates in MODEL_HOME/templates. 
+mcp will look for templates in MCP_HOME/templates. 
 
 
 Usage
