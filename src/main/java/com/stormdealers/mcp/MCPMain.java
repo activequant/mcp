@@ -12,7 +12,7 @@ public class MCPMain {
 
 	public static void main(String[] args) throws Exception {
 		
-		String modelHomeFolder = System.getProperty("MCP_HOME");
+		String modelHomeFolder = System.getenv("MCP_HOME");
 		if(modelHomeFolder==null){
 			System.err.println("No MCP_HOME system declaration found. Set/Export MCP_HOME to point to your templates folder. ");
 			System.exit(1); 

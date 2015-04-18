@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
 
 import com.stormdealers.mcp.model.EntityObject;
 import com.stormdealers.mcp.model.Generatable;
@@ -29,10 +31,11 @@ public class VelocityRenderer implements IProjectProcess {
 	private final Logger log = LogManager.getLogger(VelocityRenderer.class);
 
 	private void createFolder(String folder) {
-		log.info("Creating folder if it doesn't exist: " + folder);
 		File f = new File(folder);
-		if (!f.exists())
+		if (!f.exists()){
+			log.info("Creating folder " + folder);
 			f.mkdirs();
+		}
 	}
 
 	public void processProjectObject(ProjectObject po) throws RenderException {
@@ -148,9 +151,10 @@ public class VelocityRenderer implements IProjectProcess {
 
 		VelocityEngine ve = new VelocityEngine();
 		// Tried using classpath, but discarded it.
-		// ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-		// ve.setProperty("classpath.resource.loader.class",
-		// ClasspathResourceLoader.class.getName());
+		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
+		ve.setProperty("file.resource.loader.class", FileResourceLoader.class.getName());
+		// setting it empty, so we can use an absolute path
+		ve.setProperty("file.resource.loader.path", "");
 		ve.init();
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("ENTITY", eo);
@@ -158,22 +162,23 @@ public class VelocityRenderer implements IProjectProcess {
 		// now, let's expand the template path in case we are using one of our
 		// default templates.
 		if (template.startsWith("templates/")) {
-			// ok, we assume it's one of our default templates in MODEL_HOME
-			String modelHomeFolder = System.getProperty("MCP_HOME");
+			// ok, we assume it's one of our default templates in MCP_HOME
+			String modelHomeFolder = System.getenv("MCP_HOME");
 			if (!modelHomeFolder.endsWith(File.separator))
 				modelHomeFolder = modelHomeFolder + File.separator;
 			template = modelHomeFolder + template;
 		}
-
+		
+		
 		Template t = ve.getTemplate(template);
 		StringWriter writer = new StringWriter();
 		t.merge(ctx, writer);
-		System.out.println(writer);
+		// System.out.println(writer);
 
+		log.info("Writing file " + fullFileName); 		
 		FileWriter fileWriter = new FileWriter(fullFileName);
 		fileWriter.write(writer.toString());
-		fileWriter.flush();
+		fileWriter.flush();		
 		fileWriter.close();
-
 	}
 }

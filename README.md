@@ -13,9 +13,9 @@ Installation
 ------------
 
 Download the distribution tar.gz and unzip it to a folder of your choice. 
-Create an environment variable MODEL_HOME that points to your mcp root directory (the one with the mcp command in it). 
+Create an environment variable MCP_HOME that points to your mcp root directory (the one with the mcp command in it). 
 
-Then add MODEL_HOME folder to your $PATH variable, so that you can invoke 'mcp'. 
+Then add MCP_HOME folder to your $PATH variable, so that you can invoke 'mcp'. 
 
 mcp will look for templates in MODEL_HOME/templates. 
 
