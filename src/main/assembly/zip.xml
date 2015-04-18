@@ -29,5 +29,12 @@
         <include>*</include>
       </includes>
     </fileSet>
-  </fileSets>
+     <fileSet>
+      <directory>${project.basedir}/src/src/main/resources/templates</directory>
+      <outputDirectory>/templates</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+    </fileSet>
+ </fileSets>
 </assembly>
