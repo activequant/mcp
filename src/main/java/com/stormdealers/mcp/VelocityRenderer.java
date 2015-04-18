@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import com.stormdealers.mcp.model.EntityObject;
 import com.stormdealers.mcp.model.Generatable;
@@ -28,7 +26,7 @@ import com.stormdealers.mcp.model.PropertyObject;
  */
 public class VelocityRenderer implements IProjectProcess {
 
-	private Logger log = Logger.getLogger(VelocityRenderer.class.getName());
+	private final Logger log = LogManager.getLogger(VelocityRenderer.class);
 
 	private void createFolder(String folder) {
 		log.info("Creating folder if it doesn't exist: " + folder);
@@ -56,8 +54,7 @@ public class VelocityRenderer implements IProjectProcess {
 		}
 	}
 
-	private void processPackage(ProjectObject po, PackageObject packObj)
-			throws IOException {
+	private void processPackage(ProjectObject po, PackageObject packObj) throws IOException {
 		String tgtFolder = po.getTargetFolder();
 		String name = packObj.getName();
 		genPackageFolder(tgtFolder, name);
@@ -78,8 +75,7 @@ public class VelocityRenderer implements IProjectProcess {
 		return tgtFolder;
 	}
 
-	private void processGeneratable(ProjectObject po, PackageObject packObj,
-			Generatable g) throws IOException {
+	private void processGeneratable(ProjectObject po, PackageObject packObj, Generatable g) throws IOException {
 		if (g instanceof EntityObject) {
 			renderEntity(po, (EntityObject) g);
 		}
@@ -92,8 +88,7 @@ public class VelocityRenderer implements IProjectProcess {
 	 * @throws IOException
 	 * 
 	 */
-	private void renderEntity(ProjectObject po, EntityObject eo)
-			throws IOException {
+	private void renderEntity(ProjectObject po, EntityObject eo) throws IOException {
 
 		log.info("Rendering entity " + eo.getName());
 		// let's see if we refer some other entity from our model.
@@ -126,47 +121,50 @@ public class VelocityRenderer implements IProjectProcess {
 
 		String packName = eo.getPackageName();
 
-		String folder = genPackageFolder(po.getTargetFolder(), packName
-				+ ".interfaces.dao");
-		renderToFolder(eo, "templates/dao_interface.vm", folder,
-				"I" + eo.getName() + "Dao.java");
+		String folder = genPackageFolder(po.getTargetFolder(), packName + ".interfaces.dao");
+		renderToFolder(eo, "templates/dao_interface.vm", folder, "I" + eo.getName() + "Dao.java");
 
-		folder = genPackageFolder(po.getTargetFolder(), packName
-				+ ".interfaces.service");
-		renderToFolder(eo, "templates/service_interface.vm", folder,
-				"I" + eo.getName() + "Service.java");
+		folder = genPackageFolder(po.getTargetFolder(), packName + ".interfaces.service");
+		renderToFolder(eo, "templates/service_interface.vm", folder, "I" + eo.getName() + "Service.java");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".service");
-		renderToFolder(eo, "templates/service_impl.vm", folder, eo.getName()
-				+ "Service.java");
+		renderToFolder(eo, "templates/service_impl.vm", folder, eo.getName() + "Service.java");
 
-		folder = genPackageFolder(po.getTargetFolder(), packName
-				+ ".service.conv");
+		folder = genPackageFolder(po.getTargetFolder(), packName + ".service.conv");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".dao");
-		renderToFolder(eo, "templates/dao_impl.vm", folder, eo.getName()
-				+ "Dao.java");
+		renderToFolder(eo, "templates/dao_impl.vm", folder, eo.getName() + "Dao.java");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".entity");
-		renderToFolder(eo, "templates/entity.vm", folder, eo.getName()
-				+ ".java");
+		renderToFolder(eo, "templates/entity.vm", folder, eo.getName() + ".java");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".dto");
 
 	}
 
-	private void renderToFolder(EntityObject eo, String template,
-			String folder, String fileName) throws IOException {
+	private void renderToFolder(EntityObject eo, String template, String folder, String fileName) throws IOException {
 		// first, let's build the filename.
 		String fullFileName = folder + File.separator + fileName;
 
 		VelocityEngine ve = new VelocityEngine();
-		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-		ve.setProperty("classpath.resource.loader.class",
-				ClasspathResourceLoader.class.getName());
+		// Tried using classpath, but discarded it.
+		// ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+		// ve.setProperty("classpath.resource.loader.class",
+		// ClasspathResourceLoader.class.getName());
 		ve.init();
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("ENTITY", eo);
+
+		// now, let's expand the template path in case we are using one of our
+		// default templates.
+		if (template.startsWith("templates/")) {
+			// ok, we assume it's one of our default templates in MODEL_HOME
+			String modelHomeFolder = System.getProperty("MCP_HOME");
+			if (!modelHomeFolder.endsWith(File.separator))
+				modelHomeFolder = modelHomeFolder + File.separator;
+			template = modelHomeFolder + template;
+		}
+
 		Template t = ve.getTemplate(template);
 		StringWriter writer = new StringWriter();
 		t.merge(ctx, writer);
