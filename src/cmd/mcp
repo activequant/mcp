@@ -6,7 +6,5 @@ if [ -z $1 ]; then
 fi
 
 
-
-
-
-$JAVA_HOME/bin/java -cp "$MODEL_HOME/lib/*" com.stormdealers.mcp.MCPMain $1
+# execute our code generator
+$JAVA_HOME/bin/java -cp "$MCP_HOME/lib/*" com.stormdealers.mcp.MCPMain $1
