@@ -7,6 +7,7 @@ import java.util.List;
 // ---- Spring imports
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
 
 // ---- Project imports
@@ -23,6 +24,7 @@ import $import;
  * This service layer wraps around the dao layer.
  *
  */
+@Service
 public class ${ENTITY.name}Service implements I${ENTITY.name}Service {
 
 	@Autowired

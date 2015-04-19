@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 // spring 
+import org.springframework.stereotype.Repository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ import ${ENTITY.packageName}.interfaces.dao.I${ENTITY.name}Dao;
 import $import;
 #end
 
-
+@Repository
 public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 
 	@PersistenceContext
@@ -38,7 +39,7 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 	
 	@Override
 	public List<${ENTITY.name}> all() {
-		TypedQuery<${ENTITY.name}> query = em.createQuery("SELECT o FROM ${ENTITY.name} o", ${ENTITY.name}.class);
+		TypedQuery<${ENTITY.name}> query = em.createQuery("SELECT o FROM ${ENTITY.name}_ o", ${ENTITY.name}.class);
         return query.getResultList();    
 	} 
 	
@@ -58,7 +59,7 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 	@Override
 	public void delete(${ENTITY.name} instance) {
 		if(instance.getId()!=null){
-			Query query = em.createQuery("DELETE FROM ${ENTITY.name} o WHERE o.id=:id");
+			Query query = em.createQuery("DELETE FROM ${ENTITY.name}_ o WHERE o.id=:id");
 			query.setParameter("id", instance.getId());
 			query.executeUpdate();
 		}
@@ -69,7 +70,7 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 	 * see @I${ENTITY.name}Dao
 	 */
 	public List<${ENTITY.name}> findBy${prop.camelCaseName}(${prop.type} parameter){
-		TypedQuery<${ENTITY.name}> tq = em.createQuery("SELECT f FROM ${ENTITY.name} f " +
+		TypedQuery<${ENTITY.name}> tq = em.createQuery("SELECT f FROM ${ENTITY.name}_ f " +
 			" WHERE f.${prop.name}=:paramValue", ${ENTITY.name}.class);
 		tq.setParameter("paramValue", parameter);
 		return tq.getResultList();
@@ -88,7 +89,7 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 		// checking for not nulls .. 
 #foreach ( $prop in ${ENTITY.properties} )
 		if(sample.get${display.capitalize($prop.name)}()!=null){
-			criteria.where( builder.equal( root.get( "${prop.name}" ), sample.get${display.capitalize($prop.name)}()));
+			criteria.where( builder.equal( root.get( "${prop.name}_" ), sample.get${display.capitalize($prop.name)}()));
 		}
 #end		
 		List<${ENTITY.name}> result = em.createQuery( criteria ).getResultList();
