@@ -7,8 +7,11 @@ import java.util.List;
 // javax packages 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 // spring 
 import org.springframework.cache.annotation.Cacheable;
@@ -77,15 +80,15 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 	@Override
 	public List<${ENTITY.name}> findByExample(${ENTITY.name} sample) {
 	
-	    CriteriaBuilder builder = entityManagerFactory.getCriteriaBuilder();
+	    CriteriaBuilder builder = em.getCriteriaBuilder();
 	    CriteriaQuery<${ENTITY.name}> criteria = builder.createQuery(${ENTITY.name}.class);
 	    
-	    Root<${ENTITY.name}> root = criteria.from(${ENTITY.name});
+	    Root<${ENTITY.name}> root = criteria.from(${ENTITY.name}.class);
 		criteria.select(root);
 		// checking for not nulls .. 
 #foreach ( $prop in ${ENTITY.properties} )
-		if(sample.get${prop}()!=null){
-			criteria.where( builder.equal( root.get( ${ENTITY.name}_.${prop} ), sample.get${prop}()));
+		if(sample.get${display.capitalize($prop.name)}()!=null){
+			criteria.where( builder.equal( root.get( "${prop.name}" ), sample.get${display.capitalize($prop.name)}()));
 		}
 #end		
 		List<${ENTITY.name}> result = em.createQuery( criteria ).getResultList();

@@ -12,6 +12,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.FileResourceLoader;
+import org.apache.velocity.tools.generic.DisplayTool;
 
 import com.stormdealers.mcp.model.EntityObject;
 import com.stormdealers.mcp.model.Generatable;
@@ -158,7 +159,7 @@ public class VelocityRenderer implements IProjectProcess {
 		ve.init();
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("ENTITY", eo);
-
+		ctx.put("display",new DisplayTool());
 		// now, let's expand the template path in case we are using one of our
 		// default templates.
 		if (template.startsWith("templates/")) {

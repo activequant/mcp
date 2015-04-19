@@ -81,7 +81,7 @@ public class ${ENTITY.name} {
 	}
 	
 #foreach( $prop in ${ENTITY.properties} )
-	public void set${prop.camelCaseName}(){
+	public void set${prop.camelCaseName}(final ${prop.type} ${prop.name}){
 		this.${prop.name} = ${prop.name};
 	}
 	
