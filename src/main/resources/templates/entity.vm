@@ -21,7 +21,11 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import $import;
 #end
 
-
+#if( ${ENTITY.documentation} )
+	/**
+	 * ${ENTITY.documentation}
+	 */
+#end
 @Entity(name="${ENTITY.name}_")
 public class ${ENTITY.name} {
 	
