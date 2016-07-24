@@ -1,5 +1,11 @@
 package com.stormdealers.mcp;
 
+/**
+ * Carries a render exception. 
+ * 
+ * @author ustaudinger
+ *
+ */
 public class RenderException extends Exception {
 
 	/**

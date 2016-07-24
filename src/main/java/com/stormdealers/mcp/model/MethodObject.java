@@ -3,9 +3,8 @@ package com.stormdealers.mcp.model;
 public class MethodObject extends Annotatable {
 
 	private String returnType;
-	private String methodBody;  
-	
-	
+	private String methodBody;
+
 	public String getReturnType() {
 		return returnType;
 	}
@@ -21,5 +20,5 @@ public class MethodObject extends Annotatable {
 	public void setMethodBody(String methodBody) {
 		this.methodBody = methodBody;
 	}
-	
+
 }

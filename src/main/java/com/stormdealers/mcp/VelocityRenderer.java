@@ -33,7 +33,7 @@ public class VelocityRenderer implements IProjectProcess {
 
 	private void createFolder(String folder) {
 		File f = new File(folder);
-		if (!f.exists()){
+		if (!f.exists()) {
 			log.info("Creating folder " + folder);
 			f.mkdirs();
 		}
@@ -159,7 +159,7 @@ public class VelocityRenderer implements IProjectProcess {
 		ve.init();
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("ENTITY", eo);
-		ctx.put("display",new DisplayTool());
+		ctx.put("display", new DisplayTool());
 		// now, let's expand the template path in case we are using one of our
 		// default templates.
 		if (template.startsWith("templates/")) {
@@ -169,17 +169,16 @@ public class VelocityRenderer implements IProjectProcess {
 				modelHomeFolder = modelHomeFolder + File.separator;
 			template = modelHomeFolder + template;
 		}
-		
-		
+
 		Template t = ve.getTemplate(template);
 		StringWriter writer = new StringWriter();
 		t.merge(ctx, writer);
 		// System.out.println(writer);
 
-		log.info("Writing file " + fullFileName); 		
+		log.info("Writing file " + fullFileName);
 		FileWriter fileWriter = new FileWriter(fullFileName);
 		fileWriter.write(writer.toString());
-		fileWriter.flush();		
+		fileWriter.flush();
 		fileWriter.close();
 	}
 }

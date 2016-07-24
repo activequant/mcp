@@ -2,11 +2,13 @@ Model to Code Platform
 ======================
 
 This package is an easy to use code generator. It fits my personal use and might not fit yours. 
-It's very lightweight (much more lightweight than AndroMDA or Sculptor) and easy to extend. 
+It's very lightweight (much more lightweight than AndroMDA or Sculptor) and easy to extend. Several developer friends have told me they like it and that it creates beautiful code and is super easy to use. 
 
 It takes a project definition file, see sample.model, and generates hibernate Entities, DAO interface, DAO implementation, Service interface, Service implementation in a Spring autowired way. 
 
 It uses velocity macro templates for those implementations, you can modify these templates or create new templates. 
+
+It is quite focused on Java, but other target language files can be created, too.
 
 
 Installation
