@@ -15,6 +15,9 @@ import $import;
 #end
 
 
+/**
+ * DAO repository interface declaration 
+ */ 
 @Repository
 public interface I${ENTITY.name}Dao {
 
@@ -36,6 +39,10 @@ public interface I${ENTITY.name}Dao {
 	List<${ENTITY.name}> findBy${prop.camelCaseName}(${prop.type} parameter);
 #end	
 	
+	
+    /**
+     * Finds all ${ENTITY.name} that are similarly structured as our sample.
+     */	
 	List<${ENTITY.name}> findByExample(${ENTITY.name} sample);
 }
 
