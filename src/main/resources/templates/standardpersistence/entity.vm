@@ -9,6 +9,8 @@ package ${ENTITY.packageName}.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.GenerationType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Transient;
 
 // ---- apache commons libraries. 
@@ -21,12 +23,17 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import $import;
 #end
 
-
+#if( ${ENTITY.documentation} )
+	/**
+	 * ${ENTITY.documentation}
+	 */
+#end
 @Entity(name="${ENTITY.name}_")
 public class ${ENTITY.name} {
 	
 	// -------------- Properties and ID
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)	
 	private Integer id; 
 	
 #foreach( $prop in ${ENTITY.properties} )
@@ -96,6 +103,10 @@ public class ${ENTITY.name} {
 #end	
 
 	// ----------- EQUALS and HASHCODE
+	/**
+	 * this method uses apache's HashCodeBuilder
+	 * @return a hashcode. 
+	 */ 
 	@Override
 	public int hashCode(){
 		return new HashCodeBuilder()
@@ -105,6 +116,9 @@ public class ${ENTITY.name} {
 		.toHashCode();
 	}
 
+	/**
+	 * equals method uses apache's EqualsBuilder
+	 */
 	@Override	
 	public 	boolean equals(Object obj){
    		if (obj == null) { return false; }
@@ -122,5 +136,15 @@ public class ${ENTITY.name} {
 #end
 			.isEquals();	
 	}
+
+	/**
+	 * toString method uses apache's ReflectionToStringBuilder
+	 * @return a string describing this object. 
+	 */
+ 	@Override
+    public String toString() {
+    	return ReflectionToStringBuilder.toString(this);
+	}
+
 
 }

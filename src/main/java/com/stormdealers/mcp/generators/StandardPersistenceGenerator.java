@@ -28,6 +28,17 @@ import com.stormdealers.mcp.model.PropertyObject;
 public class StandardPersistenceGenerator extends ToolsSuper implements
 		IProjectProcess {
 
+	private final Logger log = LogManager.getLogger(VelocityRenderer.class);
+
+	private void createFolder(String folder) {
+		File f = new File(folder);
+		if (!f.exists()) {
+			log.info("Creating folder " + folder);
+			f.mkdirs();
+		}
+	}
+>>>>>>> 77c1da1efab1b350c6629fec720c32f33cd397c0:src/main/java/com/stormdealers/mcp/VelocityRenderer.java
+
 	/**
 	 * {@inheritDoc}
 	 * 

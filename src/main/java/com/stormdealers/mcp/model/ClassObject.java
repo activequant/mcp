@@ -3,6 +3,12 @@ package com.stormdealers.mcp.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Carries all fields of classes.
+ * 
+ * @author ustaudinger
+ *
+ */
 public class ClassObject extends Annotatable {
 	private boolean isAbstract = false;
 	private List<String> imports = new ArrayList<String>();

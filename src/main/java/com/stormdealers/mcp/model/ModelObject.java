@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Generic model object, underlying all entities, projects, packages, etc.
+ * Base class for all model descriptions. 
  * 
  * @author ustaudinger
  *

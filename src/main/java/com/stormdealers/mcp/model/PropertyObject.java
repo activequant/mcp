@@ -1,12 +1,17 @@
 package com.stormdealers.mcp.model;
 
+/**
+ * Carries all fields of property entries.
+ * 
+ * @author ustaudinger
+ *
+ */
 public class PropertyObject extends Annotatable {
 
 	private String type;
-
 	private String columnAnnotations = null; 
-		
-	private boolean isTransient = false; 
+	private String documentation;
+	private boolean isTransient = false;
 
 	public boolean isTransient() {
 		return isTransient;
@@ -33,7 +38,8 @@ public class PropertyObject extends Annotatable {
 	}
 
 	/**
-	 * helper method to get the camel case name. 
+	 * helper method to get the camel case name.
+	 * 
 	 * @return
 	 */
 	public String getCamelCaseName() {
@@ -43,5 +49,13 @@ public class PropertyObject extends Annotatable {
 			return name;
 		} else
 			return getName().toUpperCase();
+	}
+
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
 	}
 }

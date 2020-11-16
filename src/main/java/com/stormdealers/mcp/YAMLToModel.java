@@ -140,6 +140,11 @@ public class YAMLToModel {
 			co.setAbstract(isAbstract);
 		}
 
+		String documentation = (String) valueMap.get("documentation");
+		if (documentation != null) {
+			co.setDocumentation(documentation);
+		}
+
 		// a class has imports.
 		List<String> imports = (List<String>) valueMap.get("imports");
 		if (imports != null) {
@@ -191,11 +196,14 @@ public class YAMLToModel {
 
 	}
 
-	private void processMethod(MethodObject mo, Map<String, Object> value)
-			throws ParseException {
-		processAnnotatable(mo, value);
-		mo.setReturnType((String) value.get("returnType"));
-		mo.setMethodBody((String) value.get("methodBody"));
+	private void processMethod(MethodObject mo, Map<String, Object> valueMap) throws ParseException {
+		processAnnotatable(mo, valueMap);
+		mo.setReturnType((String) valueMap.get("returnType"));
+		mo.setMethodBody((String) valueMap.get("methodBody"));
+		String documentation = (String) valueMap.get("documentation");
+		if (documentation != null) {
+			mo.setDocumentation(documentation);
+		}
 	}
 
 	private void processAnnotatable(Annotatable co, Map<String, Object> valueMap)
@@ -203,6 +211,7 @@ public class YAMLToModel {
 		//
 		processGeneratable(co, valueMap);
 		// let's extract all those annotations.
+		@SuppressWarnings("unchecked")
 		List<String> annotations = (List<String>) valueMap.get("annotations");
 		if (annotations != null)
 			co.getAnnotations().addAll(annotations);
