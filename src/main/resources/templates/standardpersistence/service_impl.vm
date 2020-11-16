@@ -6,6 +6,7 @@ import java.util.List;
 
 // ---- Spring imports
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import $import;
 public class ${ENTITY.name}Service implements I${ENTITY.name}Service {
 
 	@Autowired
+	@Qualifier("${ENTITY.name}Dao")	
     private I${ENTITY.name}Dao dao;
     
 	@Override
@@ -44,6 +46,11 @@ public class ${ENTITY.name}Service implements I${ENTITY.name}Service {
 	@Override
 	public ${ENTITY.name} saveOrUpdate(${ENTITY.name} instance) {
 	    return dao.saveOrUpdate(instance);
+	}
+	
+	@Override
+	public void batchStore(List<${ENTITY.name}> objects) {
+		dao.batchStore(objects);
 	}
 	
 	@Transactional

@@ -3,6 +3,8 @@ package ${ENTITY.packageName}.interfaces.dao;
 
 // ---- java imports. 
 import java.util.List;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 
 // ---- Spring imports
 import org.springframework.stereotype.Repository;
@@ -15,9 +17,6 @@ import $import;
 #end
 
 
-/**
- * DAO repository interface declaration 
- */ 
 @Repository
 public interface I${ENTITY.name}Dao {
 
@@ -26,6 +25,8 @@ public interface I${ENTITY.name}Dao {
 	List<${ENTITY.name}> all();
 	
 	${ENTITY.name} saveOrUpdate(${ENTITY.name} instance);
+
+	void batchStore(List<${ENTITY.name}> objects); 
 	
 	void delete(${ENTITY.name} instance);
 	
@@ -38,9 +39,23 @@ public interface I${ENTITY.name}Dao {
 	 */
 	List<${ENTITY.name}> findBy${prop.camelCaseName}(${prop.type} parameter);
 #end	
+
+
     /**
      * Finds all ${ENTITY.name} that are similarly structured as our sample.
      */	
 	List<${ENTITY.name}> findByExample(${ENTITY.name} sample);
+	
+    /**
+     * Finds all ${ENTITY.name} through a criteria query, use for customized queries.
+     */	
+	List<${ENTITY.name}> findByQuery(CriteriaQuery<${ENTITY.name}> criteriaQuery);
+	
+	/**
+	 * Use this to obtain a criteria query for later use in findByQuery
+	 */
+	CriteriaQuery<${ENTITY.name}> getCriteriaQuery();
+
+	CriteriaBuilder getCriteriaBuilder(); 	
 }
 

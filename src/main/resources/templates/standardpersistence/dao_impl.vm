@@ -3,6 +3,7 @@ package ${ENTITY.packageName}.dao;
 
 // base java packages
 import java.util.List; 
+import java.util.ArrayList;
 
 // javax packages 
 import javax.persistence.EntityManager;
@@ -11,7 +12,11 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType; 
+
 
 // spring 
 import org.springframework.stereotype.Repository;
@@ -26,11 +31,11 @@ import ${ENTITY.packageName}.interfaces.dao.I${ENTITY.name}Dao;
 import $import;
 #end
 
-@Repository
+@Repository("${ENTITY.name}Dao")
 public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 
-	@PersistenceContext
-    private EntityManager em;
+	@PersistenceContext(unitName = "emf")
+    protected EntityManager em;
     
 	@Override
 	public ${ENTITY.name} findById(Integer id) {
@@ -54,6 +59,28 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 			return instance;
 		}	
 	}
+	
+	
+	@Override
+	public void batchStore(List<${ENTITY.name}> objects) {
+		// store former flush mode
+		FlushModeType fm = em.getFlushMode(); 
+	    
+	    // enable manual flushing
+	    em.setFlushMode(FlushModeType.COMMIT);
+    	EntityTransaction tx = em.getTransaction();
+		
+		// 
+		tx.begin();
+		for(${ENTITY.name} obj : objects) {
+			em.persist(obj); 
+		}
+		tx.commit(); 
+		
+	    // restore former flush mode
+	    em.setFlushMode(fm); 
+	}
+	
 	
 	@Transactional
 	@Override
@@ -86,17 +113,36 @@ public class ${ENTITY.name}Dao implements I${ENTITY.name}Dao {
 	    
 	    Root<${ENTITY.name}> root = criteria.from(${ENTITY.name}.class);
 		criteria.select(root);
+		
+		List<Predicate> restrictions = new ArrayList<Predicate>(); 
+		
 		// checking for not nulls .. 
 #foreach ( $prop in ${ENTITY.properties} )
 		if(sample.get${display.capitalize($prop.name)}()!=null){
-			criteria.where( builder.equal( root.get( "${prop.name}_" ), sample.get${display.capitalize($prop.name)}()));
+			restrictions.add( builder.equal( root.get( "${prop.name}" ), sample.get${display.capitalize($prop.name)}()));
 		}
 #end		
+		criteria.where(builder.and(restrictions.toArray(new Predicate[]{})));
 		List<${ENTITY.name}> result = em.createQuery( criteria ).getResultList();
 		// 
 		return result;     
 	} 
 	
+	public List<${ENTITY.name}> findByQuery(CriteriaQuery<${ENTITY.name}> criteriaQuery){
+		TypedQuery<${ENTITY.name}> tq = em.createQuery(criteriaQuery	);
+		return tq.getResultList();
+	}
 	
+	public CriteriaQuery<${ENTITY.name}> getCriteriaQuery() {
+		return em.getCriteriaBuilder().createQuery(${ENTITY.name}.class);
+	
+	}
+	
+	public CriteriaBuilder getCriteriaBuilder() {
+		return em.getCriteriaBuilder();
+	
+	}
 }
 
+	
+	

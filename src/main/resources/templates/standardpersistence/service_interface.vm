@@ -32,6 +32,8 @@ public interface I${ENTITY.name}Service {
 	
 	${ENTITY.name} saveOrUpdate(${ENTITY.name} instance);
 	
+	void batchStore(List<${ENTITY.name}> objects);
+	
 	void delete(${ENTITY.name} instance);
 
 
