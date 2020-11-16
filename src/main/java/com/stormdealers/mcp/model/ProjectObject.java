@@ -3,6 +3,11 @@ package com.stormdealers.mcp.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Describes the top level node of a project
+ * @author ustaudinger
+ *
+ */
 public class ProjectObject extends ModelObject {
 	
 	private String targetFolder = "."; 

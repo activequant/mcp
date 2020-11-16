@@ -1,4 +1,4 @@
-package com.stormdealers.mcp;
+package com.stormdealers.mcp.generators;
 
 public class ParseException extends Exception {
 

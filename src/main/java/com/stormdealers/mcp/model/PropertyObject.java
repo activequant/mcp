@@ -3,7 +3,9 @@ package com.stormdealers.mcp.model;
 public class PropertyObject extends Annotatable {
 
 	private String type;
-	
+
+	private String columnAnnotations = null; 
+		
 	private boolean isTransient = false; 
 
 	public boolean isTransient() {
@@ -20,6 +22,14 @@ public class PropertyObject extends Annotatable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getColumnAnnotations(){
+		return columnAnnotations; 
+	}
+
+	public void setColumnAnnotations(String s){
+		this.columnAnnotations = s; 
 	}
 
 	/**

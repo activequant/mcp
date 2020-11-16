@@ -1,12 +1,10 @@
-package com.stormdealers.mcp;
+package com.stormdealers.mcp.generators;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -21,24 +19,19 @@ import com.stormdealers.mcp.model.PackageObject;
 import com.stormdealers.mcp.model.ProjectObject;
 import com.stormdealers.mcp.model.PropertyObject;
 
+
 /**
- * The velocity renderer process a project model and renders the model objects.
- * 
+ * Uses velocity to render a standard persistence layer from a project object. 
  * @author ustaudinger
- * 
+ *
  */
-public class VelocityRenderer implements IProjectProcess {
+public class StandardPersistenceGenerator extends ToolsSuper implements
+		IProjectProcess {
 
-	private final Logger log = LogManager.getLogger(VelocityRenderer.class);
-
-	private void createFolder(String folder) {
-		File f = new File(folder);
-		if (!f.exists()){
-			log.info("Creating folder " + folder);
-			f.mkdirs();
-		}
-	}
-
+	/**
+	 * {@inheritDoc}
+	 * 
+	 */
 	public void processProjectObject(ProjectObject po) throws RenderException {
 		// ok, first of all, let's look at the project target folder.
 		String tgtFolder = po.getTargetFolder();
@@ -58,7 +51,8 @@ public class VelocityRenderer implements IProjectProcess {
 		}
 	}
 
-	private void processPackage(ProjectObject po, PackageObject packObj) throws IOException {
+	private void processPackage(ProjectObject po, PackageObject packObj)
+			throws IOException {
 		String tgtFolder = po.getTargetFolder();
 		String name = packObj.getName();
 		genPackageFolder(tgtFolder, name);
@@ -68,18 +62,8 @@ public class VelocityRenderer implements IProjectProcess {
 		}
 	}
 
-	private String genPackageFolder(String preTgtFolder, String packName) {
-		String name = packName.replace(".", File.separator);
-		String tgtFolder = new String(preTgtFolder);
-		if (!tgtFolder.endsWith(File.separator)) {
-			tgtFolder = tgtFolder + File.separator;
-		}
-		tgtFolder = tgtFolder + name;
-		createFolder(tgtFolder);
-		return tgtFolder;
-	}
-
-	private void processGeneratable(ProjectObject po, PackageObject packObj, Generatable g) throws IOException {
+	private void processGeneratable(ProjectObject po, PackageObject packObj,
+			Generatable g) throws IOException {
 		if (g instanceof EntityObject) {
 			renderEntity(po, (EntityObject) g);
 		}
@@ -92,7 +76,8 @@ public class VelocityRenderer implements IProjectProcess {
 	 * @throws IOException
 	 * 
 	 */
-	private void renderEntity(ProjectObject po, EntityObject eo) throws IOException {
+	private void renderEntity(ProjectObject po, EntityObject eo)
+			throws IOException {
 
 		log.info("Rendering entity " + eo.getName());
 		// let's see if we refer some other entity from our model.
@@ -125,41 +110,51 @@ public class VelocityRenderer implements IProjectProcess {
 
 		String packName = eo.getPackageName();
 
-		String folder = genPackageFolder(po.getTargetFolder(), packName + ".interfaces.dao");
-		renderToFolder(eo, "templates/dao_interface.vm", folder, "I" + eo.getName() + "Dao.java");
+		String folder = genPackageFolder(po.getTargetFolder(), packName
+				+ ".interfaces.dao");
+		renderToFolder(eo, "templates/dao_interface.vm", folder,
+				"I" + eo.getName() + "Dao.java");
 
-		folder = genPackageFolder(po.getTargetFolder(), packName + ".interfaces.service");
-		renderToFolder(eo, "templates/service_interface.vm", folder, "I" + eo.getName() + "Service.java");
+		folder = genPackageFolder(po.getTargetFolder(), packName
+				+ ".interfaces.service");
+		renderToFolder(eo, "templates/service_interface.vm", folder,
+				"I" + eo.getName() + "Service.java");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".service");
-		renderToFolder(eo, "templates/service_impl.vm", folder, eo.getName() + "Service.java");
+		renderToFolder(eo, "templates/service_impl.vm", folder, eo.getName()
+				+ "Service.java");
 
-		folder = genPackageFolder(po.getTargetFolder(), packName + ".service.conv");
+		folder = genPackageFolder(po.getTargetFolder(), packName
+				+ ".service.conv");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".dao");
-		renderToFolder(eo, "templates/dao_impl.vm", folder, eo.getName() + "Dao.java");
+		renderToFolder(eo, "templates/dao_impl.vm", folder, eo.getName()
+				+ "Dao.java");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".entity");
-		renderToFolder(eo, "templates/entity.vm", folder, eo.getName() + ".java");
+		renderToFolder(eo, "templates/entity.vm", folder, eo.getName()
+				+ ".java");
 
 		folder = genPackageFolder(po.getTargetFolder(), packName + ".dto");
 
 	}
 
-	private void renderToFolder(EntityObject eo, String template, String folder, String fileName) throws IOException {
+	private void renderToFolder(EntityObject eo, String template,
+			String folder, String fileName) throws IOException {
 		// first, let's build the filename.
 		String fullFileName = folder + File.separator + fileName;
 
 		VelocityEngine ve = new VelocityEngine();
 		// Tried using classpath, but discarded it.
 		ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
-		ve.setProperty("file.resource.loader.class", FileResourceLoader.class.getName());
+		ve.setProperty("file.resource.loader.class",
+				FileResourceLoader.class.getName());
 		// setting it empty, so we can use an absolute path
 		ve.setProperty("file.resource.loader.path", "");
 		ve.init();
 		VelocityContext ctx = new VelocityContext();
 		ctx.put("ENTITY", eo);
-		ctx.put("display",new DisplayTool());
+		ctx.put("display", new DisplayTool());
 		// now, let's expand the template path in case we are using one of our
 		// default templates.
 		if (template.startsWith("templates/")) {
@@ -169,17 +164,16 @@ public class VelocityRenderer implements IProjectProcess {
 				modelHomeFolder = modelHomeFolder + File.separator;
 			template = modelHomeFolder + template;
 		}
-		
-		
+
 		Template t = ve.getTemplate(template);
 		StringWriter writer = new StringWriter();
 		t.merge(ctx, writer);
 		// System.out.println(writer);
 
-		log.info("Writing file " + fullFileName); 		
+		log.info("Writing file " + fullFileName);
 		FileWriter fileWriter = new FileWriter(fullFileName);
 		fileWriter.write(writer.toString());
-		fileWriter.flush();		
+		fileWriter.flush();
 		fileWriter.close();
 	}
 }

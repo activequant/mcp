@@ -6,7 +6,7 @@ It's very lightweight (much more lightweight than AndroMDA or Sculptor) and easy
 
 It takes a project definition file, see sample.model, and generates hibernate Entities, DAO interface, DAO implementation, Service interface, Service implementation in a Spring autowired way. 
 
-It uses velocity macro templates for those implementations, you can modify these templates or create new templates. 
+It uses velocity macro templates for those implementations, you can modify these templates or create new templates, see below for more details. 
 
 
 Installation
@@ -29,11 +29,15 @@ Run 'mcp _model_file_' to run the code generator on it.
 
 ### Model definitions
 
-An example of a model file can be found in src/test/com/stormdealers/mcp/tests/sample.model
+An example of a model file can be found in src/test/com/stormdealers/mcp/tests/sample.model 
 
 ### Templates
 
 All current templates are located in src/main/resources/templates - I imagine this to expand over the course of the next year or so.  
+
+templates/standardpersistence contains a standard hibernate DAO + Service layer with interfaces. This works well with the shipped StandardPersistenceGenerator
+
+templates/standardprotobuf contains a standard protobuf wire layer. This works well with the shipped StandardProtobufGenerator 
 
 
 License

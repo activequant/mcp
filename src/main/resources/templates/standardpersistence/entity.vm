@@ -41,7 +41,11 @@ public class ${ENTITY.name} {
 #if( ${prop.isTransient()} )
 	@Transient
 #else
+#if ( ${prop.columnAnnotations} )
+	@Column(name="${prop.name}_", ${prop.columnAnnotations})
+#else
 	@Column(name="${prop.name}_")
+#end
 #end	
 	private ${prop.type} ${prop.name};
 		
