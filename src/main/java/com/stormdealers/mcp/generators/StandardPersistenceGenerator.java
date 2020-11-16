@@ -37,7 +37,6 @@ public class StandardPersistenceGenerator extends ToolsSuper implements
 			f.mkdirs();
 		}
 	}
->>>>>>> 77c1da1efab1b350c6629fec720c32f33cd397c0:src/main/java/com/stormdealers/mcp/VelocityRenderer.java
 
 	/**
 	 * {@inheritDoc}
