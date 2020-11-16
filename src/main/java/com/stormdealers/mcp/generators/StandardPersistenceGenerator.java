@@ -19,6 +19,10 @@ import com.stormdealers.mcp.model.PackageObject;
 import com.stormdealers.mcp.model.ProjectObject;
 import com.stormdealers.mcp.model.PropertyObject;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 
 /**
  * Uses velocity to render a standard persistence layer from a project object. 
@@ -28,15 +32,7 @@ import com.stormdealers.mcp.model.PropertyObject;
 public class StandardPersistenceGenerator extends ToolsSuper implements
 		IProjectProcess {
 
-	private final Logger log = LogManager.getLogger(VelocityRenderer.class);
-
-	private void createFolder(String folder) {
-		File f = new File(folder);
-		if (!f.exists()) {
-			log.info("Creating folder " + folder);
-			f.mkdirs();
-		}
-	}
+	private final Logger log = LogManager.getLogger(StandardPersistenceGenerator.class);
 
 	/**
 	 * {@inheritDoc}
